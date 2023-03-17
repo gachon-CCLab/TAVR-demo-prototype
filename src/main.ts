@@ -13,7 +13,7 @@ async function bootstrap() {
     .addCookieAuth('connect.sid')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('doc', app, document);
   // End of Swagger Code
 
   await app.listen(process.env.APP_PORT);

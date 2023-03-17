@@ -14,12 +14,10 @@ let AppService = class AppService {
         return 'Hello World!';
     }
     getPatientList() {
-        let ListDTO;
+        let ListDTO = [];
         console.log(ListDTO);
         for (let i = 0; i < 100; i++) {
-            ListDTO[i].MRN = i * 10000 + '';
-            ListDTO[i].Age = Math.random() * 80 + 10;
-            ListDTO[i].Sex = Math.floor(Math.random() * 2 + 1);
+            ListDTO.push({ MRN: (i + 1) * 1000 + '', Age: Math.random() * 80 + 10, Sex: Math.floor(Math.random() * 2 + 1) });
         }
         const result = {
             isSuccess: true,

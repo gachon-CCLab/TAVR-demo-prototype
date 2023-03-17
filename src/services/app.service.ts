@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ApiOperation } from '@nestjs/swagger';
 import { patientListDto } from 'src/dtos/patientsList.dto';
 import { patientDto } from '../dtos/patient.dto';
 
@@ -7,15 +8,13 @@ export class AppService {
   getHello(): string {
     return 'Hello World!';
   }
-
+  // 환자 정보 리스트 출력 API -------------------------------------------------------- 
   getPatientList() {
-    let ListDTO: patientListDto[]
+    let ListDTO: patientListDto[] = [];
     console.log(ListDTO);
 
     for (let i = 0; i < 100; i++) {
-      ListDTO[i].MRN = i * 10000 + '';
-      ListDTO[i].Age = Math.random() * 80 + 10;
-      ListDTO[i].Sex = Math.floor(Math.random() * 2 + 1);
+      ListDTO.push({MRN: (i + 1) * 1000 + '', Age: Math.random() * 80 + 10, Sex: Math.floor(Math.random() * 2 + 1 )});
     }
 
     const result: any = {
@@ -26,7 +25,9 @@ export class AppService {
     };
     return result;
   }
+  // 환자 정보 리스트 출력 API 끝 ========================================================
 
+  // 환자 세부 정보 출력 API -------------------------------------------------------- 
   getPatientInform() {
     const ptDTO: patientDto = new patientDto();
     ptDTO.MRN = '02006901';
@@ -79,7 +80,9 @@ export class AppService {
     };
     return result;
   }
+  // 환자 세부 정보 출력 API 끝 ========================================================
 
+  // 환자 PPI 결과 출력 API -------------------------------------------------------- 
   getPPIResult() {
     const result: any = {
       isSuccess: true,
@@ -89,4 +92,5 @@ export class AppService {
     };
     return result;
   }
+  // 환자 PPI 결과 출력 API 끝 ========================================================
 }

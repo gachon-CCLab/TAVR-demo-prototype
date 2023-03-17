@@ -40,14 +40,14 @@ __decorate([
     __metadata("design:returntype", String)
 ], AppController.prototype, "getHello", null);
 __decorate([
-    (0, common_1.Post)('/tavr/patientInform'),
+    (0, common_1.Post)('/tavr/patient/inform'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [patientMRN_dto_1.patientMRNDto]),
     __metadata("design:returntype", void 0)
 ], AppController.prototype, "getPatientInform", null);
 __decorate([
-    (0, common_1.Get)('/tavr/patients'),
+    (0, common_1.Get)('/tavr/patient/list'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)

@@ -11,12 +11,12 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Post('/tavr/patientInform')
+  @Post('/tavr/patient/inform')
   getPatientInform(@Body() patientMRNDto: patientMRNDto) {
     return this.appService.getPatientInform();
   }
 
-  @Get('/tavr/patients')
+  @Get('/tavr/patient/list')
   getPatientList() {
     return this.appService.getPatientList();
   }
