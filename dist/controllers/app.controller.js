@@ -24,7 +24,7 @@ let AppController = class AppController {
         return this.appService.getHello();
     }
     getPatientInform(patientMRNDto) {
-        return this.appService.getPatientInform();
+        return this.appService.getPatientInform(patientMRNDto);
     }
     getPatientList() {
         return this.appService.getPatientList();

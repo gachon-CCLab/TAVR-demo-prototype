@@ -8,84 +8,72 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppService = void 0;
 const common_1 = require("@nestjs/common");
-const patient_dto_1 = require("../dtos/patient.dto");
+const axios_1 = require("axios");
+const database_lib_1 = require("../libraries/database.lib");
 let AppService = class AppService {
     getHello() {
         return 'Hello World!';
     }
-    getPatientList() {
-        let ListDTO = [];
-        console.log(ListDTO);
-        for (let i = 0; i < 100; i++) {
-            ListDTO.push({ MRN: (i + 1) * 1000 + '', Age: Math.random() * 80 + 10, Sex: Math.floor(Math.random() * 2 + 1) });
+    async getPatientList() {
+        try {
+            const dbResult = await database_lib_1.default.query(`SELECT MRN, Age, Sex FROM ppi_patient`);
+            const result = {
+                isSuccess: true,
+                stateCode: 200,
+                message: `List of patients list retrurned`,
+                result: dbResult,
+            };
+            return result;
         }
-        const result = {
-            isSuccess: true,
-            statusCode: 200,
-            message: 'List of patients',
-            result: ListDTO,
-        };
-        return result;
+        catch (err) {
+            console.log('api 호출 실패');
+            console.log(err);
+        }
     }
-    getPatientInform() {
-        const ptDTO = new patient_dto_1.patientDto();
-        ptDTO.MRN = '02006901';
-        ptDTO.PacemakerImplatation = true;
-        ptDTO.Age = 81.08055556;
-        ptDTO.Sex = 2;
-        ptDTO.BSA = 2.13;
-        ptDTO.BMI = 29.13;
-        ptDTO.HTN = true;
-        ptDTO.CAD = false;
-        ptDTO.DM = false;
-        ptDTO.COPD = false;
-        ptDTO.AF = false;
-        ptDTO.PVD = true;
-        ptDTO.CVA = true;
-        ptDTO.hemodialysis = true;
-        ptDTO.PreviousHeartSergery = true;
-        ptDTO.SympomaticAs = true;
-        ptDTO.ACEi_ARB = false;
-        ptDTO.ACEi_ARB = false;
-        ptDTO.Beta_Blocker = false;
-        ptDTO.Aldosteroneantagonist = false;
-        ptDTO.CCB = true;
-        ptDTO.AntiPlateletotherthanASA = true;
-        ptDTO.ASA = true;
-        ptDTO.AntiPlateletTherapy = true;
-        ptDTO.Diuretics = true;
-        ptDTO.LVEF = 47;
-        ptDTO.SystolicBP = 120;
-        ptDTO.DiastolicBP = 78;
-        ptDTO.LVOT = 20;
-        ptDTO.ValveCode = 3;
-        ptDTO.ValveSize = 34;
-        ptDTO.BaselineRhythm = 0;
-        ptDTO.PR = 240;
-        ptDTO.QRS = 170;
-        ptDTO.QRSmorethan120 = true;
-        ptDTO.FirstdegreeAVblock = true;
-        ptDTO.Baseline_conduction_disorder = true;
-        ptDTO.BaselineRBBB = true;
-        ptDTO.DeltaPR = -20;
-        ptDTO.DeltaQRS = 3;
-        ptDTO.New_Onset_RBBB = false;
-        const result = {
-            isSuccess: true,
-            statusCode: 200,
-            message: 'information of patient',
-            result: ptDTO,
-        };
-        return result;
+    async getPatientInform(patientMRNDto) {
+        try {
+            const dbResult = await database_lib_1.default.query(`SELECT * FROM ppi_patient WHERE MRN = ${patientMRNDto.MRN}`);
+            if (dbResult[0] == undefined) {
+                const result = {
+                    isSuccess: false,
+                    stateCode: 400,
+                    message: `No patient having MRN = ${patientMRNDto.MRN}`
+                };
+                return result;
+            }
+            const result = {
+                isSuccess: true,
+                stateCode: 200,
+                message: `[MRN = ${patientMRNDto.MRN}] Information received`,
+                result: dbResult,
+            };
+            return result;
+        }
+        catch (err) {
+            console.log('api 호출 실패');
+            console.log(err);
+        }
     }
-    getPPIResult() {
-        const result = {
-            isSuccess: true,
-            statusCode: 200,
-            message: 'PPI result',
-            result: true,
-        };
-        return result;
+    async getPPIResult() {
+        try {
+            const response = await axios_1.default.get(process.env.PY_SERVER_URL);
+            console.log(response);
+            const result = {
+                isSuccess: true,
+                statusCode: 200,
+                message: 'PPI result',
+                result: response.data
+            };
+            return result;
+        }
+        catch (err) {
+            const result = {
+                isSuccess: false,
+                statusCode: 400,
+                message: err,
+            };
+            return result;
+        }
     }
 };
 AppService = __decorate([

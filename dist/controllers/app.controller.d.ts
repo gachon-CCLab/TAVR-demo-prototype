@@ -4,7 +4,7 @@ export declare class AppController {
     private readonly appService;
     constructor(appService: AppService);
     getHello(): string;
-    getPatientInform(patientMRNDto: patientMRNDto): any;
-    getPatientList(): any;
-    getPPIresult(patientMRNDto: patientMRNDto): any;
+    getPatientInform(patientMRNDto: patientMRNDto): Promise<any>;
+    getPatientList(): Promise<any>;
+    getPPIresult(patientMRNDto: patientMRNDto): Promise<any>;
 }

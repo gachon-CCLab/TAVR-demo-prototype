@@ -58,15 +58,15 @@ export class patientDto {
 
   @IsEmpty()
   @IsBoolean()
-  hemodialysis: boolean;
+  Hemodialysis: boolean;
 
   @IsEmpty()
   @IsBoolean()
-  PreviousHeartSergery: boolean;
+  PPreviousHeartSurgery_Intervention: boolean;
 
   @IsEmpty()
   @IsBoolean()
-  SympomaticAs: boolean;
+  SymptomaticAS: boolean;
 
   @IsEmpty()
   @IsBoolean()
@@ -162,5 +162,5 @@ export class patientDto {
 
   @IsEmpty()
   @IsBoolean()
-  New_Onset_RBBB: boolean;
+  New_Onset_LBBB: boolean;
 }

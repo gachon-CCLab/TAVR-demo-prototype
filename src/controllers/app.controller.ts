@@ -13,7 +13,7 @@ export class AppController {
 
   @Post('/tavr/patient/inform')
   getPatientInform(@Body() patientMRNDto: patientMRNDto) {
-    return this.appService.getPatientInform();
+    return this.appService.getPatientInform(patientMRNDto);
   }
 
   @Get('/tavr/patient/list')

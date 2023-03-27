@@ -86,17 +86,17 @@ __decorate([
     (0, class_validator_1.IsEmpty)(),
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
-], patientDto.prototype, "hemodialysis", void 0);
+], patientDto.prototype, "Hemodialysis", void 0);
 __decorate([
     (0, class_validator_1.IsEmpty)(),
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
-], patientDto.prototype, "PreviousHeartSergery", void 0);
+], patientDto.prototype, "PPreviousHeartSurgery_Intervention", void 0);
 __decorate([
     (0, class_validator_1.IsEmpty)(),
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
-], patientDto.prototype, "SympomaticAs", void 0);
+], patientDto.prototype, "SymptomaticAS", void 0);
 __decorate([
     (0, class_validator_1.IsEmpty)(),
     (0, class_validator_1.IsBoolean)(),
@@ -216,6 +216,6 @@ __decorate([
     (0, class_validator_1.IsEmpty)(),
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
-], patientDto.prototype, "New_Onset_RBBB", void 0);
+], patientDto.prototype, "New_Onset_LBBB", void 0);
 exports.patientDto = patientDto;
 //# sourceMappingURL=patient.dto.js.map

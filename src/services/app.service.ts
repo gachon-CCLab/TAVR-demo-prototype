@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
+import axios from 'axios';
+import { get } from 'http';
 import { patientListDto } from 'src/dtos/patientsList.dto';
+import Database from 'src/libraries/database.lib';
 import { patientDto } from '../dtos/patient.dto';
 
 @Injectable()
@@ -9,88 +12,69 @@ export class AppService {
     return 'Hello World!';
   }
   // 환자 정보 리스트 출력 API -------------------------------------------------------- 
-  getPatientList() {
-    let ListDTO: patientListDto[] = [];
-    console.log(ListDTO);
-
-    for (let i = 0; i < 100; i++) {
-      ListDTO.push({MRN: (i + 1) * 1000 + '', Age: Math.random() * 80 + 10, Sex: Math.floor(Math.random() * 2 + 1 )});
+  async getPatientList() {
+    try {
+      const dbResult: any = await Database.query(`SELECT MRN, Age, Sex FROM ppi_patient`);
+      const result: any = {
+        isSuccess: true,
+        stateCode: 200,
+        message: `List of patients list retrurned`,
+        result: dbResult,
+      };
+      return result;
+    } catch (err: any) {
+      console.log('api 호출 실패');
+      console.log(err);
     }
-
-    const result: any = {
-      isSuccess: true,
-      statusCode: 200,
-      message: 'List of patients',
-      result: ListDTO,
-    };
-    return result;
   }
   // 환자 정보 리스트 출력 API 끝 ========================================================
 
   // 환자 세부 정보 출력 API -------------------------------------------------------- 
-  getPatientInform() {
-    const ptDTO: patientDto = new patientDto();
-    ptDTO.MRN = '02006901';
-    ptDTO.PacemakerImplatation = true;
-    ptDTO.Age = 81.08055556;
-    ptDTO.Sex = 2;
-    ptDTO.BSA = 2.13;
-    ptDTO.BMI = 29.13;
-    ptDTO.HTN = true;
-    ptDTO.CAD = false;
-    ptDTO.DM = false;
-    ptDTO.COPD = false;
-    ptDTO.AF = false;
-    ptDTO.PVD = true;
-    ptDTO.CVA = true;
-    ptDTO.hemodialysis = true;
-    ptDTO.PreviousHeartSergery = true;
-    ptDTO.SympomaticAs = true;
-    ptDTO.ACEi_ARB = false;
-    ptDTO.ACEi_ARB = false;
-    ptDTO.Beta_Blocker = false;
-    ptDTO.Aldosteroneantagonist = false;
-    ptDTO.CCB = true;
-    ptDTO.AntiPlateletotherthanASA = true;
-    ptDTO.ASA = true;
-    ptDTO.AntiPlateletTherapy = true;
-    ptDTO.Diuretics = true;
-    ptDTO.LVEF = 47;
-    ptDTO.SystolicBP = 120;
-    ptDTO.DiastolicBP = 78;
-    ptDTO.LVOT = 20;
-    ptDTO.ValveCode = 3;
-    ptDTO.ValveSize = 34;
-    ptDTO.BaselineRhythm = 0;
-    ptDTO.PR = 240;
-    ptDTO.QRS = 170;
-    ptDTO.QRSmorethan120 = true;
-    ptDTO.FirstdegreeAVblock = true;
-    ptDTO.Baseline_conduction_disorder = true;
-    ptDTO.BaselineRBBB = true;
-    ptDTO.DeltaPR = -20;
-    ptDTO.DeltaQRS = 3;
-    ptDTO.New_Onset_RBBB = false;
-
-    const result: any = {
-      isSuccess: true,
-      statusCode: 200,
-      message: 'information of patient',
-      result: ptDTO,
-    };
-    return result;
+  async getPatientInform(patientMRNDto) {
+    try {
+      const dbResult: any = await Database.query(`SELECT * FROM ppi_patient WHERE MRN = ${patientMRNDto.MRN}`);
+      if (dbResult[0] == undefined) {
+        const result: any = {
+          isSuccess: false,
+          stateCode: 400,
+          message: `No patient having MRN = ${patientMRNDto.MRN}`
+        };
+        return result;
+      }
+      const result: any = {
+        isSuccess: true,
+        stateCode: 200,
+        message: `[MRN = ${patientMRNDto.MRN}] Information received`,
+        result: dbResult,
+      };
+      return result;
+    } catch (err: any) {
+      console.log('api 호출 실패');
+      console.log(err);
+    }
   }
   // 환자 세부 정보 출력 API 끝 ========================================================
 
   // 환자 PPI 결과 출력 API -------------------------------------------------------- 
-  getPPIResult() {
-    const result: any = {
-      isSuccess: true,
-      statusCode: 200,
-      message: 'PPI result',
-      result: true,
-    };
-    return result;
+  async getPPIResult() {
+    try {
+      const response = await axios.get(process.env.PY_SERVER_URL);
+      console.log(response);
+      const result: any = {
+        isSuccess: true,
+        statusCode: 200,
+        message: 'PPI result',
+        result: response.data
+      };
+      return result;
+    } catch (err: any) {
+      const result: any = {
+        isSuccess: false,
+        statusCode: 400,
+        message: err,
+      };
+      return result;
+    }
   }
   // 환자 PPI 결과 출력 API 끝 ========================================================
 }

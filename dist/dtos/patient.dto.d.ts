@@ -13,9 +13,9 @@ export declare class patientDto {
     AF: boolean;
     PVD: boolean;
     CVA: boolean;
-    hemodialysis: boolean;
-    PreviousHeartSergery: boolean;
-    SympomaticAs: boolean;
+    Hemodialysis: boolean;
+    PPreviousHeartSurgery_Intervention: boolean;
+    SymptomaticAS: boolean;
     ACEi_ARB: boolean;
     Beta_Blocker: boolean;
     Aldosteroneantagonist: boolean;
@@ -39,5 +39,5 @@ export declare class patientDto {
     BaselineRBBB: boolean;
     DeltaPR: number;
     DeltaQRS: number;
-    New_Onset_RBBB: boolean;
+    New_Onset_LBBB: boolean;
 }
