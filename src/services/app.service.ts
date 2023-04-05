@@ -1,3 +1,4 @@
+import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import axios from 'axios';
@@ -8,6 +9,7 @@ import { patientDto } from '../dtos/patient.dto';
 
 @Injectable()
 export class AppService {
+  constructor(private readonly httpService: HttpService) {}
   getHello(): string {
     return 'Hello World!';
   }
@@ -58,7 +60,7 @@ export class AppService {
   // 환자 PPI 결과 출력 API -------------------------------------------------------- 
   async getPPIResult() {
     try {
-      const response = await axios.get(process.env.PY_SERVER_URL);
+      const response = await this.httpService.get(process.env.PY_SERVER_URL).toPromise();
       console.log(response);
       const result: any = {
         isSuccess: true,
