@@ -30,7 +30,7 @@ let AppController = class AppController {
         return this.appService.getPatientList();
     }
     getPPIresult(patientMRNDto) {
-        return this.appService.getPPIResult();
+        return this.appService.getPPIResult(patientMRNDto);
     }
 };
 __decorate([

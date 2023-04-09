@@ -23,6 +23,6 @@ export class AppController {
 
   @Post('/tavr/patient/ppi')
   getPPIresult(@Body() patientMRNDto: patientMRNDto) {
-    return this.appService.getPPIResult();
+    return this.appService.getPPIResult(patientMRNDto);
   }
 }

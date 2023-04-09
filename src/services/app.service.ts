@@ -6,6 +6,7 @@ import { get } from 'http';
 import { patientListDto } from 'src/dtos/patientsList.dto';
 import Database from 'src/libraries/database.lib';
 import { patientDto } from '../dtos/patient.dto';
+import { lastValueFrom, map } from 'rxjs';
 
 @Injectable()
 export class AppService {
@@ -58,15 +59,26 @@ export class AppService {
   // 환자 세부 정보 출력 API 끝 ========================================================
 
   // 환자 PPI 결과 출력 API -------------------------------------------------------- 
-  async getPPIResult() {
+  async getPPIResult(patientMRNDto) {
     try {
-      const response = await this.httpService.get(process.env.PY_SERVER_URL).toPromise();
-      console.log(response);
+      const dbResult: any = await Database.query(`SELECT * FROM ppi_patient WHERE MRN = ${patientMRNDto.MRN}`);
+      if (dbResult[0] == undefined) {
+        const result: any = {
+          isSuccess: false,
+          stateCode: 400,
+          message: `No patient having MRN = ${patientMRNDto.MRN}`
+        };
+        return result;
+      }
+      delete dbResult[0].PacemakerImplantation
+      delete dbResult[0].PPMdays
+      delete dbResult[0].MRN
+      const response = await lastValueFrom(this.httpService.post(process.env.PY_SERVER_URL, dbResult[0]).pipe(map((res) => res.data)));
       const result: any = {
         isSuccess: true,
         statusCode: 200,
         message: 'PPI result',
-        result: response.data
+        result: response
       };
       return result;
     } catch (err: any) {

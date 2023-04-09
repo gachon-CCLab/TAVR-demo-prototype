@@ -13,6 +13,7 @@ exports.AppService = void 0;
 const axios_1 = require("@nestjs/axios");
 const common_1 = require("@nestjs/common");
 const database_lib_1 = require("../libraries/database.lib");
+const rxjs_1 = require("rxjs");
 let AppService = class AppService {
     constructor(httpService) {
         this.httpService = httpService;
@@ -60,15 +61,26 @@ let AppService = class AppService {
             console.log(err);
         }
     }
-    async getPPIResult() {
+    async getPPIResult(patientMRNDto) {
         try {
-            const response = await this.httpService.get(process.env.PY_SERVER_URL).toPromise();
-            console.log(response);
+            const dbResult = await database_lib_1.default.query(`SELECT * FROM ppi_patient WHERE MRN = ${patientMRNDto.MRN}`);
+            if (dbResult[0] == undefined) {
+                const result = {
+                    isSuccess: false,
+                    stateCode: 400,
+                    message: `No patient having MRN = ${patientMRNDto.MRN}`
+                };
+                return result;
+            }
+            delete dbResult[0].PacemakerImplantation;
+            delete dbResult[0].PPMdays;
+            delete dbResult[0].MRN;
+            const response = await (0, rxjs_1.lastValueFrom)(this.httpService.post(process.env.PY_SERVER_URL, dbResult[0]).pipe((0, rxjs_1.map)((res) => res.data)));
             const result = {
                 isSuccess: true,
                 statusCode: 200,
                 message: 'PPI result',
-                result: response.data
+                result: response
             };
             return result;
         }
