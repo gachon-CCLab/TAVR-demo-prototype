@@ -12,15 +12,31 @@ const app_controller_1 = require("../controllers/app.controller");
 const app_service_1 = require("../services/app.service");
 const config_1 = require("@nestjs/config");
 const axios_1 = require("@nestjs/axios");
+const typeorm_1 = require("@nestjs/typeorm");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            config_1.ConfigModule.forRoot(),
+            config_1.ConfigModule.forRoot({
+                isGlobal: true
+            }),
             axios_1.HttpModule.register({
                 timeout: 5000,
                 maxRedirects: 5,
+            }),
+            typeorm_1.TypeOrmModule.forRoot({
+                type: 'mysql',
+                host: process.env.DB_HOST,
+                port: parseInt(process.env.DB_PORT),
+                username: process.env.DB_USER,
+                password: process.env.DB_PASS,
+                database: process.env.DB_NAME,
+                entities: ['../entities/*.ts'],
+                synchronize: false,
+                logging: true,
+                keepConnectionAlive: true,
+                charset: 'utf8mb4'
             })
         ],
         controllers: [app_controller_1.AppController],
